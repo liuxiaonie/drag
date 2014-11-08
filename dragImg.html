@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style type="text/css">
+	
+		#img{
+
+			background-color: red;
+			border: 1px solid red ;
+			user-select:none;
+			z-index: 9999;
+		}
+		#img:hover{
+
+			cursor: move;
+		}
+		#out{
+			position: absolute;
+			background-color: grey;
+		}
+	</style>
+</head>
+<body>
+	<!-- <img src="1.jpg" width="300px" height="300px" id="img" /> -->
+	<div id="out"><img src="1.jpg" width="300px" height="300px"  id="img"/></div>
+	<div id="x"> </div>
+ 	<script type="text/javascript">
+
+
+ 		var bodyW = document.documentElement.clientWidth;
+ 		var bodyH = document.documentElement.clientHeight;
+
+	 	function getEle (el) {
+	 		// body...
+	 		return document.getElementById(el);
+	 	}
+	 	function autoCenter (el) {
+	 		// body...
+	 		//居中	 		
+	 		var elW = el.offsetWidth;
+	 		var elH= el.offsetHeight;
+
+	 		el.style.left = (bodyW - elW) / 2 + "px";
+	 		el.style.top = (bodyH - elH) / 2 + "px";
+
+	 	}
+	 	el = getEle("out");
+	 	autoCenter(el);
+
+
+	 	var isDrag = false;	 	
+	 	var mouseOffsetX = 0;
+	 	var mouseOffsetY = 0;
+
+
+	 	getEle("img").addEventListener("mousedown", function(e){
+	 		var e = e || window.event;
+
+	 		e.preventDefault();
+        	e.stopPropagation();
+
+	 		mouseOffsetX = e.pageX - getEle ("out").offsetLeft;
+	 		mouseOffsetY = e.pageY - getEle ("out").offsetTop;
+
+	 		isDrag = true ;
+	 	})
+
+	 	getEle("img").onmousemove = function(e){
+	 		var e = e || window.event;
+	
+
+	 		var mouseX = e.pageX;
+	 		var mouseY = e.pageY;
+
+			var moveX = 0;
+			var moveY = 0;
+
+	 		if(isDrag){
+
+		 		moveX = mouseX - mouseOffsetX;
+		 		moveY = mouseY - mouseOffsetY;
+
+		 		var maxX = bodyW - getEle ("out").offsetWidth;
+		 		var maxY = bodyH - getEle ("out").offsetHeight;
+	
+		 	    moveX = Math.min(maxX,Math.max(0,moveX));
+		 	    moveY = Math.min(maxY,Math.max(0,moveY));
+
+		 		getEle ("out").style.left = moveX + "px";
+		 		getEle ("out").style.top = moveY + "px";
+		 		document.getElementById("x").innerHTML = moveX+" "+moveY;
+		 	}	
+
+		 	
+		 }
+
+	 	document.onmouseup = function(){
+
+	 		isDrag = false;
+
+	 	}
+	 	
+ 	
+ 	</script>
+</body>
+</html>
